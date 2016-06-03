@@ -8,12 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		E91E33781D017AB2004EF96C /* VideoThumbnailSelectionView.h in Headers */ = {isa = PBXBuildFile; fileRef = E91E33771D017AB2004EF96C /* VideoThumbnailSelectionView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E91E33831D017B4F004EF96C /* ScrollOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91E337F1D017B4F004EF96C /* ScrollOptions.swift */; };
+		E91E33841D017B4F004EF96C /* SelectionThumb.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91E33801D017B4F004EF96C /* SelectionThumb.swift */; };
+		E91E33851D017B4F004EF96C /* VideoThumbnailSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91E33811D017B4F004EF96C /* VideoThumbnailSelectionView.swift */; };
+		E91E33861D017B4F004EF96C /* VideoThumbnailSelectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E91E33821D017B4F004EF96C /* VideoThumbnailSelectionView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E91E33741D017AB2004EF96C /* VideoThumbnailSelectionView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VideoThumbnailSelectionView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E91E33771D017AB2004EF96C /* VideoThumbnailSelectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoThumbnailSelectionView.h; sourceTree = "<group>"; };
 		E91E33791D017AB2004EF96C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E91E337F1D017B4F004EF96C /* ScrollOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollOptions.swift; sourceTree = "<group>"; };
+		E91E33801D017B4F004EF96C /* SelectionThumb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectionThumb.swift; sourceTree = "<group>"; };
+		E91E33811D017B4F004EF96C /* VideoThumbnailSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoThumbnailSelectionView.swift; sourceTree = "<group>"; };
+		E91E33821D017B4F004EF96C /* VideoThumbnailSelectionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoThumbnailSelectionView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +54,10 @@
 		E91E33761D017AB2004EF96C /* VideoThumbnailSelectionView */ = {
 			isa = PBXGroup;
 			children = (
+				E91E337F1D017B4F004EF96C /* ScrollOptions.swift */,
+				E91E33801D017B4F004EF96C /* SelectionThumb.swift */,
+				E91E33811D017B4F004EF96C /* VideoThumbnailSelectionView.swift */,
+				E91E33821D017B4F004EF96C /* VideoThumbnailSelectionView.xib */,
 				E91E33771D017AB2004EF96C /* VideoThumbnailSelectionView.h */,
 				E91E33791D017AB2004EF96C /* Info.plist */,
 			);
@@ -120,6 +132,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E91E33861D017B4F004EF96C /* VideoThumbnailSelectionView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,6 +143,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E91E33851D017B4F004EF96C /* VideoThumbnailSelectionView.swift in Sources */,
+				E91E33831D017B4F004EF96C /* ScrollOptions.swift in Sources */,
+				E91E33841D017B4F004EF96C /* SelectionThumb.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,7 +190,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -217,7 +233,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -230,28 +246,33 @@
 		E91E337D1D017AB2004EF96C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = VideoThumbnailSelectionView/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sarpsolakoglu.VideoThumbnailSelectionView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		E91E337E1D017AB2004EF96C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = VideoThumbnailSelectionView/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sarpsolakoglu.VideoThumbnailSelectionView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
