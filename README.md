@@ -1,8 +1,8 @@
 # VideoThumbnailSelectionView
 Video thumbnail (cover) selection tool similar to the one in Instagram's app. Written in Swift 2.2.
 
-![Unselected](Screenshots/ss_unselected.png)
-![Unselected](Screenshots/ss_selected.png)
+![Unselected](Screenshots/ss_unselected.PNG)
+![Unselected](Screenshots/ss_selected.PNG)
 
 ## Installation
 ### CocoaPods
@@ -21,7 +21,7 @@ pod 'VideoThumbnailSelectionView', '~>0.1.0'
 You can add a UIView to your Storyboard and set both the **Class** and the **Module** properties to **VideoThumbnailSelectionView**.
 You can than link the view to your ViewController.
 
-![storyboard](Screenshots\ss_storyboard)
+![storyboard](Screenshots/ss_storyboard.PNG)
 
 #### Code
 You can also init the view from code.
