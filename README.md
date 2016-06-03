@@ -19,9 +19,20 @@ pod 'VideoThumbnailSelectionView', '~>0.1.0'
 ### Initialization
 #### Storyboard
 You can add a UIView to your Storyboard and set both the **Class** and the **Module** properties to **VideoThumbnailSelectionView**.
-You can than link the view to your ViewController.
 
 ![storyboard](Screenshots/ss_storyboard.PNG)
+
+After that link with the relevant IBOutlet.
+
+**Swift**
+```swift
+@IBOUtlet weak var videoThumbnailSelectionView: VideoThumbnailSelectionView!
+```
+
+**Obj-c**
+```obj-c
+@property (weak, nonatomic) IBOutlet VideoThumbnailSelectionView *videoThumbnailSelectionView;
+```
 
 #### Code
 You can also init the view from code.
