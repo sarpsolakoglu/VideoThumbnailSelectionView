@@ -99,7 +99,7 @@ import AVFoundation
         setup(frame: nil)
     }
     
-    override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         setup(frame: frame)
     }
