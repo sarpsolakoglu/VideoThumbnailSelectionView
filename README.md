@@ -12,7 +12,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'VideoThumbnailSelectionView', '~>0.1.0'
+pod 'VideoThumbnailSelectionView', '~>0.1.1'
 ```
 
 ## Usage
