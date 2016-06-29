@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "VideoThumbnailSelectionView"
-  s.version      = "0.1.0"
+  s.version      = "0.1.1"
   s.summary      = "Easy drag and drop library for Instagram like video thumbnail selection."
 
   s.description  = <<-DESC
