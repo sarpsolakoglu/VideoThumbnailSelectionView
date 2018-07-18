@@ -75,7 +75,7 @@ import AVFoundation
     /**
      The color of the corner of the view.
      */
-    public var cornerColor: UIColor = .whiteColor() {
+    public var cornerColor: UIColor = .white {
         didSet {
             view.backgroundColor = cornerColor
         }
@@ -112,18 +112,18 @@ import AVFoundation
         - completion: UIImage is returned in this block if succesful.
         - failure: This block is called in case of failure.
      */
-    @objc public func snapshot(forSecond second: Float64, completion:(UIImage)->(), failure:(()->())?) {
+    @objc public func snapshot(forSecond second: Float64, completion:@escaping (UIImage)->(), failure:(()->())?) {
         guard let generator = generator else {
             if failure != nil {
                 failure!()
             }
             return
         }
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { 
+        DispatchQueue.global(qos: .default).async() {
             if let image = self.generateThumbnail(generator: generator, second: second) {
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async {
                     completion(image)
-                })
+                }
                 return
             } else {
                 if failure != nil {
@@ -147,13 +147,13 @@ import AVFoundation
         if videoLoaded { return }
         if videoLoading { return }
         
-        guard let assetVideoTrack : AVAssetTrack = asset.tracksWithMediaType(AVMediaTypeVideo)[0] else { return }
+        let assetVideoTrack : AVAssetTrack = asset.tracks(withMediaType: AVMediaType.video)[0]
         
         self.asset = asset
         
         activityIndicator.startAnimating()
         
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async() {
             let size = assetVideoTrack.naturalSize
             let thumbnailHeight = self.thumbnailView.bounds.size.height
             let videoAspect = size.width / size.height
@@ -167,7 +167,7 @@ import AVFoundation
             let videoDuration = CMTimeGetSeconds(asset.duration)
             let sampleInterval = videoDuration / Float64(thumbnailCount)
             
-            self.selectionThumb = SelectionThumb(frame: CGRectMake(self.thumbnailView.frame.origin.x, self.thumbnailView.frame.origin.y, thumbnailWidth, thumbnailHeight))
+            self.selectionThumb = SelectionThumb(frame: CGRect.init(x: self.thumbnailView.frame.origin.x, y: self.thumbnailView.frame.origin.y, width: thumbnailWidth, height: thumbnailHeight))
             
             self.scrollOptions = ScrollOptions(startPoint: self.leftMargin.constant + thumbnailWidth / 2, endPoint: self.view.bounds.size.width - thumbnailWidth / 2 - self.rightMargin.constant)
             
@@ -180,8 +180,8 @@ import AVFoundation
                     self.selectionThumb!.previewImageView.image = image
                     self.view.addSubview(self.selectionThumb!)
                 }
-                let imageView = UIImageView(frame: CGRectMake(currentX, 0.0, thumbnailWidth, thumbnailHeight))
-                imageView.contentMode = .ScaleAspectFill
+                let imageView = UIImageView(frame: CGRect.init(x: currentX, y: 0, width: thumbnailWidth, height: thumbnailHeight))
+                imageView.contentMode = .scaleAspectFill
                 imageView.image = image
                 self.thumbnailView.addSubview(imageView)
                 self.thumbnails.append(imageView)
@@ -191,7 +191,7 @@ import AVFoundation
             self.activityIndicator.stopAnimating()
             self.videoLoaded = true
             self.videoLoading = false
-            self.didScrollToPercent(0, override: true)
+            self.didScrollToPercent(percent: 0, override: true)
         }
     }
     
@@ -234,21 +234,21 @@ import AVFoundation
             })
     }
     
-    private func generateThumbnail(generator generator: AVAssetImageGenerator, second: Float64) -> UIImage? {
+    private func generateThumbnail(generator: AVAssetImageGenerator, second: Float64) -> UIImage? {
         let time = CMTimeMake(Int64(second * 60), 60)
         do {
-            let imgRef = try generator.copyCGImageAtTime(time, actualTime: nil)
-            return UIImage(CGImage: imgRef)
+            let imgRef = try generator.copyCGImage(at: time, actualTime: nil)
+            return UIImage.init(cgImage: imgRef)
         } catch {
             return nil
         }
     }
     
     //MARK: - Private loader functions
-    private func setup(frame frame: CGRect?) {
+    private func setup(frame: CGRect?) {
         loadNib()
         if frame != nil {
-            view.frame = CGRectMake(0, 0, CGRectGetWidth(frame!), CGRectGetHeight(frame!))
+            view.frame =  CGRect.init(x: 0, y: 0, width: frame!.width, height: frame!.height)
         }
         addSubview(view)
         pinView()
@@ -256,33 +256,33 @@ import AVFoundation
     }
     
     private func loadNib() {
-        NSBundle(forClass: VideoThumbnailSelectionView.self).loadNibNamed("VideoThumbnailSelectionView", owner: self, options: nil)
+        Bundle.main.loadNibNamed("VideoThumbnailSelectionView", owner: self, options: nil)
     }
     
     private func pinView() {
         view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint(item: view, attribute: .Leading, relatedBy: .Equal, toItem: self , attribute: .Leading, multiplier: 1, constant: 0).active = true
-        NSLayoutConstraint(item: view, attribute: .Trailing, relatedBy: .Equal, toItem: self, attribute: .Trailing, multiplier: 1, constant: 0).active = true
-        NSLayoutConstraint(item: view, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1, constant: 0).active = true
-        NSLayoutConstraint(item: view, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1, constant: 0).active = true
+        NSLayoutConstraint(item: view, attribute: .leading, relatedBy: .equal, toItem: self , attribute: .leading, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: view, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: view, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: view, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
         setNeedsLayout()
         layoutIfNeeded()
     }
     
     //MARK: - Touches
-    override public func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if scrollOptions == nil { return }
         guard let selectionThumb = selectionThumb else { return }
         if let touch = touches.first {
-            let loc = touch.locationInView(thumbnailView)
-            if CGRectContainsPoint(selectionThumb.frame, loc) {
+            let loc = touch.location(in: thumbnailView)
+            if selectionThumb.frame.contains(loc) {
                 scrollOptions!.thumbStartLocation = selectionThumb.center.x
                 scrollOptions!.scrollStartLocation = loc.x
                 scrollOptions!.currentlyScrolling = true
                 
                 if zoomAnimationScale > 1.0 {
                     selectionThumb.layer.removeAllAnimations()
-                    UIView.animateWithDuration(0.2, animations: {
+                    UIView.animate(withDuration: 0.2, animations: {
                         selectionThumb.layer.transform = CATransform3DScale(CATransform3DIdentity, self.zoomAnimationScale, self.zoomAnimationScale, 1.0)
                     })
                 }
@@ -291,27 +291,27 @@ import AVFoundation
 
     }
     
-    override public func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if scrollOptions == nil { return }
         if !(scrollOptions!.currentlyScrolling) { return }
         guard let selectionThumb = selectionThumb else { return }
         if let touch = touches.first {
-            let loc = touch.locationInView(thumbnailView)
-            let newX = scrollOptions!.getNewLocationAccordingToPoint(loc.x)
+            let loc = touch.location(in: thumbnailView)
+            let newX = scrollOptions!.getNewLocationAccordingToPoint(x: loc.x)
             selectionThumb.center.x = newX
             //call view
-            didScrollToPercent(scrollOptions!.scrollPercent, override: false)
+            didScrollToPercent(percent: scrollOptions!.scrollPercent, override: false)
         }
     }
     
-    override public func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if scrollOptions == nil { return }
         if !(scrollOptions!.currentlyScrolling) { return }
         guard let selectionThumb = selectionThumb else { return }
-        didScrollToPercent(scrollOptions!.scrollPercent, override: true)
+        didScrollToPercent(percent: scrollOptions!.scrollPercent, override: true)
         if zoomAnimationScale > 1.0 {
             selectionThumb.layer.removeAllAnimations()
-            UIView.animateWithDuration(0.2, animations: {
+            UIView.animate(withDuration: 0.2, animations: {
                 selectionThumb.layer.transform = CATransform3DIdentity
             })
         }
