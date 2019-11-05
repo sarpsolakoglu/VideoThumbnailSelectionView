@@ -112,23 +112,20 @@ import AVFoundation
         - completion: UIImage is returned in this block if succesful.
         - failure: This block is called in case of failure.
      */
-    @objc public func snapshot(forSecond second: Float64, completion:(UIImage)->(), failure:(()->())?) {
+    @objc public func snapshot(forSecond second: Float64, completion: @escaping (UIImage)->(), failure:(()->())?) {
         guard let generator = generator else {
-            if failure != nil {
-                failure!()
-            }
+            failure?()
             return
         }
-        dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0).async(DispatchQueue.global) { 
-            if let image = self.generateThumbnail(generator: generator, second: second) {
-                dispatch_async(dispatch_get_main_queue(), {
+        
+        DispatchQueue.global().async {
+           if let image = self.generateThumbnail(generator: generator, second: second) {
+            DispatchQueue.main.async {
                     completion(image)
-                })
+                }
                 return
             } else {
-                if failure != nil {
-                    failure!()
-                }
+                failure?()
                 return
             }
         }
@@ -152,22 +149,21 @@ import AVFoundation
         self.asset = asset
         
         activityIndicator.startAnimating()
-        
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             let size = assetVideoTrack.naturalSize
             let thumbnailHeight = self.thumbnailView.bounds.size.height
             let videoAspect = size.width / size.height
             let thumbnailWidth = thumbnailHeight * videoAspect
             
             let generator = AVAssetImageGenerator(asset: asset)
-            generator.requestedTimeToleranceBefore = kCMTimeZero
-            generator.requestedTimeToleranceAfter = kCMTimeZero
+            generator.requestedTimeToleranceBefore = .zero
+            generator.requestedTimeToleranceAfter = .zero
             
             let thumbnailCount = Int(ceil(self.thumbnailView.bounds.size.width / thumbnailWidth))
             let videoDuration = CMTimeGetSeconds(asset.duration)
             let sampleInterval = videoDuration / Float64(thumbnailCount)
             
-            self.selectionThumb = SelectionThumb(frame: CGRectMake(self.thumbnailView.frame.origin.x, self.thumbnailView.frame.origin.y, thumbnailWidth, thumbnailHeight))
+            self.selectionThumb = SelectionThumb(frame: CGRect(x: self.thumbnailView.frame.origin.x, y: self.thumbnailView.frame.origin.y, width: thumbnailWidth, height: thumbnailHeight))
             
             self.scrollOptions = ScrollOptions(startPoint: self.leftMargin.constant + thumbnailWidth / 2, endPoint: self.view.bounds.size.width - thumbnailWidth / 2 - self.rightMargin.constant)
             
@@ -180,8 +176,8 @@ import AVFoundation
                     self.selectionThumb!.previewImageView.image = image
                     self.view.addSubview(self.selectionThumb!)
                 }
-                let imageView = UIImageView(frame: CGRectMake(currentX, 0.0, thumbnailWidth, thumbnailHeight))
-                imageView.contentMode = .ScaleAspectFill
+                let imageView = UIImageView(frame: CGRect(x: currentX, y: 0.0, width: thumbnailWidth, height: thumbnailHeight))
+                imageView.contentMode = .scaleAspectFill
                 imageView.image = image
                 self.thumbnailView.addSubview(imageView)
                 self.thumbnails.append(imageView)
@@ -191,7 +187,8 @@ import AVFoundation
             self.activityIndicator.stopAnimating()
             self.videoLoaded = true
             self.videoLoading = false
-            self.didScrollToPercent(0, override: true)
+            self.didScrollToPercent(percent: 0, override: true)
+            
         }
     }
     
@@ -234,7 +231,7 @@ import AVFoundation
             })
     }
     
-    func uncgenerateThumbnail(generator: AVAssetImageGenerator, second: Float64) -> UIImage? {
+    func generateThumbnail(generator: AVAssetImageGenerator, second: Float64) -> UIImage? {
         let time = CMTimeMake(value: Int64(second * 60), timescale: 60)
         do {
             let imgRef = try generator.copyCGImage(at: time, actualTime: nil)
@@ -270,7 +267,7 @@ import AVFoundation
     }
     
     //MARK: - Touches
-    override public func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if scrollOptions == nil { return }
         guard let selectionThumb = selectionThumb else { return }
         if let touch = touches.first {
@@ -291,7 +288,7 @@ import AVFoundation
 
     }
     
-    override public func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if scrollOptions == nil { return }
         if !(scrollOptions!.currentlyScrolling) { return }
         guard let selectionThumb = selectionThumb else { return }
@@ -304,7 +301,7 @@ import AVFoundation
         }
     }
     
-    override public func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if scrollOptions == nil { return }
         if !(scrollOptions!.currentlyScrolling) { return }
         guard let selectionThumb = selectionThumb else { return }
