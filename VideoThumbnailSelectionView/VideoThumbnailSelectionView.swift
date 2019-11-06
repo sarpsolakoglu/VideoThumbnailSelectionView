@@ -47,7 +47,9 @@ import AVFoundation
      View calls this block when selection changes. Should be set before loading video.
      */
     public var onUpdatedImage: (UIImage)->() = { _ in }
-  
+    
+    /// This one tells the time at which the thumbnail is for
+    public var imageTime: Float64 = 0
     
     /**
      The opacity of the black shade color on the thumbnails. Defaults to 0.5.
@@ -225,6 +227,7 @@ import AVFoundation
         snapshot(forSecond: videoDuration * Float64(percent), completion: {[weak self] image in
             self?.selectionThumb?.previewImageView.image = image
             self?.onUpdatedImage(image)
+            self?.imageTime = videoDuration * Float64(percent)
             self?.shouldUpdateFrame = true
             }, failure: {[weak self] in
                 self?.shouldUpdateFrame = true
