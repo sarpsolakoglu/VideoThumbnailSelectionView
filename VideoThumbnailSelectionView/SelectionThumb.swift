@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SelectionThumb: UIView {
+final class SelectionThumb: UIView {
     var previewImageView: UIImageView!
     
     override init(frame: CGRect) {

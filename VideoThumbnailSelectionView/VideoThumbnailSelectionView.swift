@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-@objc public class VideoThumbnailSelectionView: UIView {
+@objc public final class VideoThumbnailSelectionView: UIView {
     
     //MARK: - Private params
     
