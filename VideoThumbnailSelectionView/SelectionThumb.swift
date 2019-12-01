@@ -8,13 +8,14 @@
 
 import UIKit
 
-class SelectionThumb: UIView {
+final class SelectionThumb: UIView {
     var previewImageView: UIImageView!
     
     override init(frame: CGRect) {
-        previewImageView = UIImageView(frame: CGRectMake(2, 2, frame.size.width - 4, frame.size.height - 4))
+        previewImageView = UIImageView(frame: CGRect(x: 2, y: 2, width: frame.size.width - 4, height: frame.size.height - 4))
         super.init(frame: frame)
-        backgroundColor = .whiteColor()
+
+        backgroundColor = .white
         addSubview(previewImageView)
     }
     
